@@ -11,7 +11,6 @@ hero_text, hero_preview = st.columns([1.15, 1], gap="large")
 
 with hero_text:
     st.html(
-        '<p class="mz-eyebrow">Arabic NLP · Banking support · Portfolio project</p>'
         '<h1 class="mz-h1">Understanding Arabic banking requests, and knowing when to ask a human.</h1>'
         '<p class="mz-lede">Mizan reads a customer message written in Modern Standard Arabic or dialect, '
         "removes personal details such as card and Emirates ID numbers, and predicts which of "

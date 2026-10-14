@@ -36,8 +36,8 @@ ui.table(["Stage", "Work", "Evidence in the repository"], [
     ["<b>Safety</b>", "Chose a human-review threshold on validation data and checked it on the test set.",
      "<span class='mz-mono'>mizan_config.json</span>"],
     ["<b>Engineering</b>", "Built a classifier service and FastAPI endpoint, plus "
-     "a test suite that runs on every push (the model is mocked in CI). Wrote a Dockerfile.",
-     "<span class='mz-mono'>service.py, api.py</span>, GitHub Actions"],
+     "a test suite that runs on every push (the model is mocked in CI). Built and tested a Docker image, including a run with networking switched off.",
+     "<span class='mz-mono'>service.py, api.py, Dockerfile</span>, GitHub Actions"],
     ["<b>Product</b>", "Designed and deployed this site and live demo on Streamlit Community Cloud.",
      "<span class='mz-mono'>demo/</span>"],
 ])
@@ -90,9 +90,9 @@ st.html(
     "<li>Data pipeline, Arabic normalisation, PII redaction (unit tests)</li>"
     "<li>Three-way benchmark on the test set</li>"
     "<li>Fine-tuned AraBERT, published</li><li>Validation-chosen review threshold</li>"
-    "<li>Classifier service and FastAPI (unit tests, and checked by hand with the real model)</li><li>Live demo (this site)</li></ul></div>"
+    "<li>Classifier service and FastAPI (unit tests, and checked by hand with the real model)</li><li>Live demo (this site)</li>"
+    "<li>Docker image: built on Apple silicon, same results as the local API, non-root, health check passing, and working with networking switched off</li></ul></div>"
     '<div class="mz-col-amber"><h4>Written, not yet verified</h4><ul class="mz-ticks mz-amber">'
-    "<li>Docker image (Dockerfile not yet built)</li>"
     "<li>Per-intent and per-example analysis (notebook 04 provided, not yet run)</li></ul></div>"
     '<div class="mz-col-grey"><h4>Proposed next steps</h4><ul class="mz-ticks mz-grey">'
     "<li>Evaluate on Gulf dialects (Emirati, Saudi) before any UAE use</li>"

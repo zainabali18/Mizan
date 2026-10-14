@@ -102,7 +102,7 @@ ui.table(["", "This public demo", "Intended self-hosted deployment"], [
     ["<b>Inference</b>", "On CPU inside the app process. No third-party AI API is called.", "Same code, same CPU inference"],
     ["<b>Your message</b>", "Sent from your browser to the app server and processed in memory. The app does not store or log it; "
      "the hosting platform's own policies apply.", "Never leaves the bank's network"],
-    ["<b>Status</b>", "Live", "Dockerfile written, <b>not yet built or tested</b>"],
+    ["<b>Status</b>", "Live", "Image built and tested on a MacBook (Apple silicon), including a run with networking switched off. Not yet run on a bank's infrastructure."],
 ])
 cpu1, cpu2 = st.columns(2, gap="large")
 cpu1.html('<div class="mz-h3">Running on CPU</div><p class="mz-p">One query took about '

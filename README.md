@@ -194,6 +194,7 @@ docker run -p 8000:8000 mizan
 
 - **The model is downloaded during the build;** the container then runs with `HF_HUB_OFFLINE=1`, so it never contacts the internet.
 - It uses CPU-only PyTorch, runs as a non-root user, and includes a health check.
+- **Tested (15 Oct 2026, MacBook, Apple silicon):** the build took about 9 minutes; the container gave the same results as the local API (58-72 ms per request once warm), ran as user `mizan`, reported `healthy`, and kept message text out of its logs. A second container started with `--network none` still classified a message, so the model loads and runs with no network access.
 
 ### Demo
 

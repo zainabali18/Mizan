@@ -8,7 +8,7 @@ A customer writes to their bank in Arabic, in formal Modern Standard Arabic or i
 
 1. **removes personal data** (Emirates ID, IBAN, card and phone numbers, emails) before the text reaches the model,
 2. **classifies the request** into one of 77 banking intents with a fine-tuned open-source Arabic model running on CPU,
-3. returns a **confidence score** and **routes uncertain requests to a human agent**.
+3. returns the model's score and **flags low-score requests for human review** (the flag is returned; no review queue is connected).
 
 Everything runs on open-source models that can be hosted inside a bank's own infrastructure. The Docker image downloads the model at build time and runs **fully offline**, so **no customer data is sent to an external API**.
 
@@ -24,7 +24,7 @@ Everything runs on open-source models that can be hosted inside a bank's own inf
 | Latency per query | 350 ms *on a GPU* | **104 ms on a CPU** |
 | Training data | none | 1,078 examples, 23 min on a free T4 GPU |
 
-**With human handoff:** at a confidence threshold of 85% (chosen on validation data), Mizan **handles 74% of requests automatically at 89% accuracy**. The remaining **26% go to a human**, which is where most of its mistakes would have been.
+**With a human-review threshold:** at a score threshold of 0.85 (chosen on validation data), Mizan **handles 74% of requests automatically at 89% accuracy**. The remaining **26% are flagged for a person**, and that group contains most of the model's mistakes. The score is not calibrated, though: the model can still be confidently wrong (see [Live testing](#live-testing-with-the-real-model)).
 
 ---
 
@@ -115,14 +115,14 @@ For context, SinaLab report about 92% F1 (MSA) for an AraBERT model trained on t
 
 **Trade-off:** TF-IDF is over 250× faster (0.4 ms against 104 ms), but 104 ms on a CPU is still well within real-time chat requirements, and the 15-point accuracy gain matters more for customers.
 
-### Human handoff (`mizan_config.json`)
+### Human-review threshold (`mizan_config.json`)
 
 A bank shouldn't auto-answer when the model is unsure. The notebook picks the lowest confidence threshold at which auto-handled **validation** requests are at least 90% accurate. It chose **0.85**, then checked that choice on the test set:
 
 | | Share of requests | Accuracy |
 |---|---|---|
 | Handled automatically (confidence ≥ 0.85) | **73.8%** | **89.4%** |
-| Routed to a human agent | 26.2% | n/a |
+| Flagged for human review | 26.2% | n/a |
 
 This turns a 79% accurate model into a system that is about 89% accurate on everything it answers by itself. The threshold is a single setting a bank can tune to its own risk appetite.
 
@@ -143,21 +143,47 @@ curl -X POST localhost:8000/classify -H "Content-Type: application/json" \
      -d '{"text": "بطاقتي 4111 1111 1111 1111 انسرقت، رقم جوالي 0501234567"}'
 ```
 
+Real output from the published model (15 Oct 2026, MacBook CPU):
+
 ```json
 {
-  "intent": "البطاقة المفقودة أو المسروقة",
-  "confidence": 0.97,
+  "intent": "الهاتف المفقود أو المسروق",
+  "confidence": 0.981,
   "route": "auto",
   "threshold": 0.85,
-  "top_intents": [{"intent": "البطاقة المفقودة أو المسروقة", "confidence": 0.97}, "..."],
+  "top_intents": [
+    {"intent": "الهاتف المفقود أو المسروق", "confidence": 0.981},
+    {"intent": "بطاقة مخترقة", "confidence": 0.0014},
+    {"intent": "نسيان رمز المرور", "confidence": 0.0013}
+  ],
   "redacted_text": "بطاقتي [CARD_NUMBER] انسرقت، رقم جوالي [PHONE]",
   "pii_detected": ["CARD_NUMBER", "PHONE"],
-  "latency_ms": 104.0
+  "latency_ms": 6627.5
 }
 ```
-*(The output is illustrative; run it to see real values.)*
+
+The redaction worked, but **the intent is wrong**: this is a stolen *card*, and the model answered *lost or stolen phone* with a high score. It is kept here on purpose; see [Live testing](#live-testing-with-the-real-model) below. This run's `latency_ms` (6.6 s) came straight after the server had been idle. Once warm, requests took 44-59 ms; the very first request also downloads the 541 MB model.
+
+Invalid requests (empty, over 1,000 characters, malformed) return HTTP 422 with the reason, and never echo the submitted text back.
 
 Endpoints: `POST /classify`, `GET /intents`, `GET /health`.
+
+### Live testing with the real model
+
+Requests sent by hand to the API on a MacBook CPU (15 Oct 2026). A handful of messages, so these are observations, not measurements. Recorded in `results/evidence/live_spot_checks.json`.
+
+| Message (stolen card, one part removed at a time) | Predicted intent | Score | Decision |
+|---|---|---|---|
+| Card number **and** phone number | Lost or stolen **phone** ✗ | 0.981 | auto |
+| Card number only | Lost or stolen card ✓ | 0.400 | review |
+| No numbers | Lost or stolen card ✓ | 0.855 | auto |
+| Phone number only | Lost or stolen **phone** ✗ | 0.988 | auto |
+| Formal Arabic (MSA) wording | Topping up by card ✗ | 0.436 | review |
+
+- **A phone mention overrides the card.** Any message with "رقم جوالي" ("my phone number") went to *lost or stolen phone* at about 0.98. The threshold can't catch a confident mistake.
+- **Redaction tags lower the score.** The training data contains no personal data, so the model never saw `[CARD_NUMBER]`; adding one cut the score from 0.855 to 0.400. Next step: insert fictional personal data into training examples and redact it the same way.
+- **The threshold caught the uncertain errors.** Of the demo's seven examples, three were right with scores above 0.95; three (a wrong intent, a near miss and a greeting) scored below 0.85 and were flagged. The stolen-card message was the only confident mistake.
+- **Speed:** 44-59 ms per request on the MacBook CPU once the model had loaded.
 
 ### Docker (CPU, offline at runtime)
 
@@ -194,7 +220,7 @@ python -m mizan.data             # builds data/processed/
 python -m mizan.baseline_tfidf   # baseline 1 (CPU, seconds)
 # baselines 2-3: run notebooks/02_*.ipynb and 03_*.ipynb on Colab (T4 GPU)
 python -m mizan.report --write   # refreshes the results table
-python -m pytest -q              # 61 tests (runs in GitHub Actions)
+python -m pytest -q              # 65 tests (runs in GitHub Actions)
 ```
 
 ---
@@ -213,10 +239,10 @@ python -m pytest -q              # 61 tests (runs in GitHub Actions)
 │   └── api.py            # FastAPI app
 ├── notebooks/            # Colab: zero-shot LLM, AraBERT fine-tuning
 ├── results/              # one JSON per experiment
-├── tests/                # 61 tests; model mocked so CI needs no GPU
+├── tests/                # 65 tests; model mocked so CI needs no GPU
 ├── demo/                 # Streamlit site (live): streamlit_app.py, views/, webui/, static/
 ├── app.py                # Gradio demo (alternative)
-├── mizan_config.json     # model id + human-handoff threshold
+├── mizan_config.json     # model id + human-review threshold
 ├── Dockerfile
 └── data/                 # raw + processed ArBanking77 sample
 ```
@@ -228,7 +254,9 @@ python -m pytest -q              # 61 tests (runs in GitHub Actions)
 - **Next steps:**
   - train on the full ArBanking77 corpus;
   - try parameter-efficient fine-tuning (LoRA) of a small open LLM;
-  - add model monitoring (confidence drift, handoff rate) in production.
+  - train with fictional personal data inserted and redacted, so the model learns tags like `[CARD_NUMBER]`;
+  - measure and calibrate the model score;
+  - add model monitoring (score drift, review rate) in production.
 
 ---
 

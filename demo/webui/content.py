@@ -85,8 +85,6 @@ _SPECIAL_CASE = {"pin": "PIN", "atm": "ATM", "apple": "Apple", "google": "Google
 # Curated demo inputs. All personal details are fictional test values
 # (4111 1111 1111 1111 is the standard Visa test number).
 EXAMPLES = [
-    {"title": "Stolen card, with personal data", "tag": "Dialect",
-     "text": "بطاقتي 4111 1111 1111 1111 انسرقت امبارح، رقم جوالي 0501234567"},
     {"title": "Card hasn't arrived", "tag": "MSA",
      "text": "لقد طلبت بطاقة جديدة منذ أسبوعين ولم تصل بعد"},
     {"title": "ATM won't give cash", "tag": "Dialect",
@@ -97,9 +95,14 @@ EXAMPLES = [
      "text": "حولت مصاري على IBAN AE07 0331 2345 6789 0123 456 ولسا ما وصلت"},
     {"title": "Identity check failing", "tag": "Dialect",
      "text": "رقم هويتي 784-1990-1234567-1 بس التطبيق ما بقبل يتحقق من هويتي"},
+    {"title": "Known failure: stolen card + phone", "tag": "Known failure",
+     "text": "بطاقتي 4111 1111 1111 1111 انسرقت امبارح، رقم جوالي 0501234567",
+     "note": "In testing, mentioning a phone number made the model answer \"lost or stolen phone\" "
+             "with a high score, so the threshold does not catch it."},
     {"title": "Vague greeting", "tag": "Edge case",
      "text": "مرحبا"},
 ]
+PREVIEW_EXAMPLE = EXAMPLES[0]   # the overview's live preview: an example the model gets right in testing
 
 PII_TYPES = [
     ("EMIRATES_ID", "Emirates ID", "784-YYYY-NNNNNNN-N, with or without separators; Arabic-Indic digits too"),
@@ -168,6 +171,11 @@ def data_summary() -> dict:
 @lru_cache(maxsize=1)
 def training_log() -> dict:
     return json.loads((EVIDENCE / "arabert_training_log.json").read_text(encoding="utf-8"))
+
+
+@lru_cache(maxsize=1)
+def spot_checks() -> dict:
+    return json.loads((EVIDENCE / "live_spot_checks.json").read_text(encoding="utf-8"))
 
 
 @lru_cache(maxsize=1)

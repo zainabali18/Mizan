@@ -66,6 +66,11 @@ st.html(
     f"<li><b>The LLM baseline confirmed the case for fine-tuning.</b> A zero-shot 1.5B model scored {C.pct(H['llm_f1'])} "
     f"macro-F1, below even TF-IDF ({C.pct(H['tfidf_f1'])}). Its mistakes were plausible but wrong neighbouring intents, "
     "which intent names alone cannot separate. Unparseable answers (40 of 370) were counted as wrong, not dropped.</li>"
+    "<li><b>Live testing found a confident mistake.</b> Run through the API with the real model, a stolen-card message "
+    "that also gave a phone number was classified as <i>lost or stolen phone</i> with a score of 0.98. Removing parts of "
+    "the message one at a time showed two causes: the word \"phone\" overrides \"card\", and redaction tags such as "
+    "<span class='mz-mono'>[CARD_NUMBER]</span> lower the score because the model never saw them in training. The example "
+    "was taken off the front page, labelled as a known failure in the demo, and written up on the Results page.</li>"
     f"<li><b>The threshold landed just under its target.</b> Chosen for 90% accuracy on validation, it gave "
     f"{C.pct(H['auto_acc'])} on test. With only 124 validation queries, it is presented as approximate, and more "
     "data is listed as a next step.</li>"
@@ -85,18 +90,18 @@ st.html(
     "<li>Data pipeline, Arabic normalisation, PII redaction (unit tests)</li>"
     "<li>Three-way benchmark on the test set</li>"
     "<li>Fine-tuned AraBERT, published</li><li>Validation-chosen review threshold</li>"
-    "<li>Classifier service and FastAPI (tests with a stand-in model)</li><li>Live demo (this site)</li></ul></div>"
+    "<li>Classifier service and FastAPI (unit tests, and checked by hand with the real model)</li><li>Live demo (this site)</li></ul></div>"
     '<div class="mz-col-amber"><h4>Written, not yet verified</h4><ul class="mz-ticks mz-amber">'
     "<li>Docker image (Dockerfile not yet built)</li>"
-    "<li>FastAPI with the real model (tested with a stand-in model only)</li>"
     "<li>Per-intent and per-example analysis (notebook 04 provided, not yet run)</li></ul></div>"
     '<div class="mz-col-grey"><h4>Proposed next steps</h4><ul class="mz-ticks mz-grey">'
     "<li>Evaluate on Gulf dialects (Emirati, Saudi) before any UAE use</li>"
     "<li>Train on the full ArBanking77 corpus</li>"
     "<li>Measure and calibrate the model score</li>"
+    "<li>Train with fictional personal data inserted and redacted, so the model learns the tags</li>"
     "<li>Compare a LoRA fine-tuned small LLM</li>"
     "<li>Add a trained PII detector for names and addresses</li>"
-    "<li>Connect the review flag to a real queue, with monitoring of handoff rate and drift</li></ul></div></div>"
+    "<li>Connect the review flag to a real queue, with monitoring of review rate and drift</li></ul></div></div>"
 )
 
 ui.section("06", "Limitations")
@@ -105,6 +110,7 @@ st.html('<ul class="mz-ticks mz-amber" style="max-width:52rem">'
         "<li>One training run per model and no confidence intervals, so differences of a few points may not be meaningful.</li>"
         "<li>Only MSA and Palestinian dialect were tested; the examples come from a UK-style digital bank translated into Arabic.</li>"
         "<li>The model always picks one of 77 intents; there is no explicit \"out of scope\" class.</li>"
+        "<li>It can be confidently wrong: a mention of a phone number pulled a stolen-card message to <i>lost or stolen phone</i> at 0.98.</li>"
         "<li>A demonstration: no customer replies, bank integrations, review queue, access control or audit trail.</li></ul>")
 
 ui.footer()

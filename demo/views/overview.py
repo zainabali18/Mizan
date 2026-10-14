@@ -5,12 +5,13 @@ from webui import components as ui
 from webui import content as C
 
 H = C.headline()
-EXAMPLE = C.EXAMPLES[0]["text"]
+EXAMPLE = C.PREVIEW_EXAMPLE["text"]
 
 hero_text, hero_preview = st.columns([1.15, 1], gap="large")
 
 with hero_text:
     st.html(
+        '<p class="mz-eyebrow">Arabic NLP · Banking support · Portfolio project</p>'
         '<h1 class="mz-h1">Understanding Arabic banking requests, and knowing when to ask a human.</h1>'
         '<p class="mz-lede">Mizan reads a customer message written in Modern Standard Arabic or dialect, '
         "removes personal details such as card and Emirates ID numbers, and predicts which of "
@@ -69,7 +70,7 @@ st.html(
     "<li><b>A fine-tuned Arabic model, published openly</b> on Hugging Face, trained in 23 minutes on a free GPU.</li>"
     "<li><b>A human-review threshold chosen on validation data,</b> then checked on the test set: answers that clear "
     f"it were {C.pct(H['auto_acc'])} accurate.</li>"
-    "<li><b>A tested service around the model:</b> a Python classifier and FastAPI endpoint, 61 automated tests in "
+    "<li><b>A tested service around the model:</b> a Python classifier and FastAPI endpoint, 65 automated tests in "
     "GitHub Actions, and this site.</li></ol>"
 )
 
@@ -95,7 +96,7 @@ with preview_slot:
         with st.spinner("Loading the Arabic model for a live preview…"):
             r = ui.classify_example(EXAMPLE)
         st.html(ui.result_panel(r, EXAMPLE, "Live output from the deployed model", compact=True))
-        st.caption("Fictional card and phone numbers. Try your own message in the live demo.")
+        st.caption("A sample message. Try your own, including fictional card or ID numbers, in the live demo.")
     except Exception:  # model unavailable: show the real redaction step only
         redacted, _ = redact(EXAMPLE)
         st.html(

@@ -54,7 +54,9 @@ with left:
         for e in C.EXAMPLES:
             st.html(f'<div style="padding:.35rem 0;border-bottom:1px solid var(--line-soft)">'
                     f'<div class="mz-ar" lang="ar" style="font-size:1.02rem">{ui.esc(e["text"])}</div>'
-                    f'<div class="mz-small">{ui.esc(e["title"])} · {ui.esc(e["tag"])}</div></div>')
+                    f'<div class="mz-small">{ui.esc(e["title"])} · {ui.esc(e["tag"])}</div>'
+                    + (f'<div class="mz-small" style="color:var(--amber)">{ui.esc(e["note"])}</div>' if e.get("note") else "")
+                    + '</div>')
 
 with right:
     st.html('<div class="mz-h3">2 · Result</div>'
@@ -85,6 +87,10 @@ with result_area:
     if st.session_state["last"]:
         original, r = st.session_state["last"]
         st.html(ui.result_panel(r, original, "Result from the deployed model"))
+        known = next((e for e in C.EXAMPLES if e["text"] == original and e.get("note")), None)
+        if known:
+            ui.callout(f"<b>Known failure.</b> {ui.esc(known['note'])} A high score is not proof of a right "
+                       "answer: see Results, section 06.", warn=True)
         if st.session_state["message"] != original:
             st.caption("The message box has changed since this result. Select Classify message to update it.")
     elif not submitted:
@@ -94,7 +100,7 @@ ui.section("Guide", "Reading the result")
 a, b, c = st.columns(3, gap="large")
 a.html('<div class="mz-h3">Model score</div><p class="mz-p">The highest softmax output of the classifier, between 0 and 1. '
        "Higher means the model favours one intent more strongly. It has <b>not been calibrated</b>, so 0.90 does "
-       "not mean a 90% chance of being correct.</p>")
+       "not mean a 90% chance of being correct, and the model can be confidently wrong.</p>")
 b.html(f'<div class="mz-h3">Review threshold ({H["threshold"]:.2f})</div><p class="mz-p">Chosen on the validation set as '
        "the lowest score at which auto-handled answers were at least 90% accurate. On the test set, "
        f"{C.pct(H['auto_share'])} of messages cleared it, and those were {C.pct(H['auto_acc'])} accurate.</p>")

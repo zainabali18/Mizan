@@ -3,12 +3,15 @@
 Run locally:   uvicorn mizan.api:app --port 8000      then open http://localhost:8000/docs
 Run in Docker: see Dockerfile
 
-Privacy: the raw request text is never logged or returned; responses contain
-only the PII-redacted text.
+Privacy: the raw request text is never logged or returned. Successful responses
+contain only the PII-redacted text, and validation errors (empty, too long,
+malformed) say what was wrong without echoing the input back.
 """
 from __future__ import annotations
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from . import __version__
@@ -28,7 +31,7 @@ class IntentScore(BaseModel):
 class ClassifyResponse(BaseModel):
     intent: str
     confidence: float
-    route: str = Field(..., description='"auto" = answer automatically, "human" = send to an agent')
+    route: str = Field(..., description='"auto" = score meets the threshold; "human" = flagged for human review')
     threshold: float
     top_intents: list[IntentScore]
     redacted_text: str
@@ -41,9 +44,17 @@ def create_app(classifier: MizanClassifier | None = None) -> FastAPI:
     app = FastAPI(
         title="Mizan API",
         version=__version__,
-        description="Sovereign Arabic intent classification for banking support, "
-                    "with PII redaction and human handoff.",
+        description="Self-hostable Arabic intent classification for banking support. Personal data is "
+                    "redacted before classification, and requests scoring below the threshold are flagged "
+                    "for human review (the flag is returned; no review queue is connected).",
     )
+
+    @app.exception_handler(RequestValidationError)
+    async def validation_error(request: Request, exc: RequestValidationError) -> JSONResponse:
+        # FastAPI's default 422 body includes the submitted value ("input"), which could be a
+        # customer message containing personal data. Return what was wrong, never the value itself.
+        errors = [{k: v for k, v in e.items() if k in ("type", "loc", "msg")} for e in exc.errors()]
+        return JSONResponse(status_code=422, content={"detail": errors})
 
     @app.get("/health")
     def health() -> dict:

@@ -1,0 +1,26 @@
+{
+  "source": "Manual requests to the FastAPI service (python -m uvicorn mizan.api:app) running the published model on an Apple MacBook Pro CPU, 15 Oct 2026. Copied from the terminal output; English glosses added for readers.",
+  "model": "zainabali18/mizan-arabert-arbanking77",
+  "threshold": 0.85,
+  "warm_latency_ms": {"min": 44, "max": 59, "note": "After the model had loaded. The first request after start-up or an idle period took 0.7-6.6 s (plus a one-off 2.4 min model download)."},
+  "variants": {
+    "purpose": "Same stolen-card request with one element removed at a time, to find what changes the prediction.",
+    "expected": "البطاقة المفقودة أو المسروقة",
+    "rows": [
+      {"name": "Card number and phone number", "text": "بطاقتي 4111 1111 1111 1111 انسرقت، رقم جوالي 0501234567", "gloss": "My card 4111… was stolen, my phone number is 0501234567", "intent": "الهاتف المفقود أو المسروق", "score": 0.981, "route": "auto"},
+      {"name": "Card number only", "text": "بطاقتي 4111 1111 1111 1111 انسرقت", "gloss": "My card 4111… was stolen", "intent": "البطاقة المفقودة أو المسروقة", "score": 0.400, "route": "human"},
+      {"name": "No numbers", "text": "بطاقتي انسرقت", "gloss": "My card was stolen", "intent": "البطاقة المفقودة أو المسروقة", "score": 0.855, "route": "auto"},
+      {"name": "Phone number only", "text": "بطاقتي انسرقت، رقم جوالي 0501234567", "gloss": "My card was stolen, my phone number is 0501234567", "intent": "الهاتف المفقود أو المسروق", "score": 0.988, "route": "auto"},
+      {"name": "Formal Arabic (MSA)", "text": "سُرقت بطاقتي البنكية، ماذا أفعل؟", "gloss": "My bank card was stolen, what should I do?", "intent": "التعبئة عن طريق البطاقة", "score": 0.436, "route": "human"}
+    ]
+  },
+  "site_examples": [
+    {"title": "Stolen card, with personal data", "intent": "الهاتف المفقود أو المسروق", "score": 0.981, "route": "auto", "verdict": "wrong"},
+    {"title": "Card hasn't arrived", "intent": "وصول البطاقة", "score": 0.953, "route": "auto", "verdict": "right"},
+    {"title": "ATM won't give cash", "intent": "رفض السحب النقدي", "score": 0.994, "route": "auto", "verdict": "right"},
+    {"title": "Top up with Apple Pay", "intent": "آبل باي أو جوجل باي", "score": 0.980, "route": "auto", "verdict": "right"},
+    {"title": "Transfer to an IBAN", "intent": "لم يتم تحديث الرصيد بعد التحويل المصرفي", "score": 0.369, "route": "human", "verdict": "wrong"},
+    {"title": "Identity check failing", "intent": "تحقق من هويتي", "score": 0.622, "route": "human", "verdict": "close"},
+    {"title": "Vague greeting", "intent": "الحصول على بطاقة احتياطية", "score": 0.435, "route": "human", "verdict": "no banking request"}
+  ]
+}

@@ -75,3 +75,20 @@ def test_api_endpoints(config):
 
     assert client.post("/classify", json={"text": ""}).status_code == 422
     assert client.post("/classify", json={"text": "   "}).status_code == 422
+
+
+def test_validation_errors_never_echo_the_input(config):
+    clf, _ = make(config, [0.9, 0.06, 0.04])
+    client = TestClient(create_app(clf))
+    long_msg = "بطاقتي 4111 1111 1111 1111 " + "ب" * 1000
+    for payload in ({"text": long_msg}, {"text": ""}, {}, {"text": 123}):
+        r = client.post("/classify", json=payload)
+        assert r.status_code == 422
+        assert "4111" not in r.text and "input" not in r.text
+        assert all({"type", "loc", "msg"} <= set(e) for e in r.json()["detail"])
+
+
+def test_whitespace_only_error_is_plain(config):
+    clf, _ = make(config, [0.9, 0.06, 0.04])
+    r = TestClient(create_app(clf)).post("/classify", json={"text": "   "})
+    assert r.status_code == 422 and r.json() == {"detail": "text must not be empty"}

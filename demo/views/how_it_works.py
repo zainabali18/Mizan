@@ -111,7 +111,7 @@ cpu1.html('<div class="mz-h3">Running on CPU</div><p class="mz-p">One query took
           f"{H['arabert_mb']:.0f} MB model is loaded once per server process and reused for every request.</p>")
 cpu2.html('<div class="mz-h3">Also in the repository</div><ul class="mz-ticks">'
           "<li>A FastAPI service with <span class='mz-mono'>/classify</span>, <span class='mz-mono'>/intents</span> and "
-          "<span class='mz-mono'>/health</span>, tested with a stand-in model.</li>"
+          "<span class='mz-mono'>/health</span>, unit-tested with a stand-in model and checked by hand with the real one.</li>"
           "<li>A TF-IDF baseline that trains in seconds, a possible fallback.</li>"
           "<li>Notebooks for the LLM benchmark and the fine-tuning run.</li></ul>")
 

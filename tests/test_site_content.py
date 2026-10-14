@@ -99,3 +99,18 @@ def test_prediction_analysis_helpers():
     assert tc["count"].sum() == 2
     sb = analysis.score_buckets(df)
     assert sb.queries.sum() == 6
+
+
+def test_spot_checks_match_the_examples_and_labels():
+    s = C.spot_checks()
+    titles = {e["title"] for e in s["site_examples"]}
+    assert len(titles) == len(C.EXAMPLES)
+    known = {**C.labels()}
+    for row in s["variants"]["rows"] + s["site_examples"]:
+        assert row["intent"] in known
+        assert (row["route"] == "auto") == (row["score"] >= s["threshold"])
+
+
+def test_preview_is_not_the_known_failure():
+    assert not C.PREVIEW_EXAMPLE.get("note")
+    assert sum(bool(e.get("note")) for e in C.EXAMPLES) == 1

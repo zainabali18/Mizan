@@ -145,6 +145,39 @@ ui.table(["Customer message", "Correct intent", "LLM answer"], [
 
 analysis.render_arabert_section()
 
+# Live spot checks with the real model (results/evidence/live_spot_checks.json)
+S = C.spot_checks()
+V = S["variants"]
+st.html('<div class="mz-h3" style="margin-top:2rem">Fine-tuned AraBERT: what live testing found</div>'
+        '<p class="mz-p" style="max-width:46rem">Requests sent by hand to the API running the published model on a '
+        "MacBook CPU. These are a handful of messages, so they are observations, not measurements. The same "
+        "stolen-card request was sent with one part removed at a time to see what changes the answer.</p>")
+ui.table(["Message", "Predicted intent", "Score", "Decision", "Correct"], [
+    [f'<div class="mz-ar" lang="ar">{C.display_text(v["text"])}</div><div class="mz-small">{ui.esc(v["name"])}: {ui.esc(v["gloss"])}</div>',
+     f'<span class="mz-ar" lang="ar">{ui.esc(v["intent"])}</span><br><span class="mz-small">{ui.esc(C.english_for(v["intent"]))}</span>',
+     f'{v["score"]:.3f}', "Automatic" if v["route"] == "auto" else "Review",
+     "Yes" if v["intent"] == V["expected"] else "<b>No</b>"]
+    for v in V["rows"]], num_cols=[2],
+    caption=f"Correct answer for every row: {ui.esc(C.english_for(V['expected']))}. Threshold {S['threshold']:.2f}.")
+f1, f2 = st.columns(2, gap="large")
+f1.html('<div class="mz-h3">A phone mention overrides the card</div><p class="mz-p">Every version containing '
+        "\"رقم جوالي\" (\"my phone number\") was classified as <i>lost or stolen phone</i> with a score near 0.98, "
+        "so it was cleared for automatic handling. The threshold cannot catch a mistake the model is confident "
+        "about, which is why the score is not treated as a probability of being right.</p>")
+f2.html('<div class="mz-h3">Redaction tags lower the score</div><p class="mz-p">Adding a card number, which the model '
+        "only sees as <span class='mz-mono'>[CARD_NUMBER]</span>, kept the right intent but cut the score from 0.855 to "
+        "0.400. The training data contains no personal data, so the model never saw these tags. A fix is to insert "
+        "fictional card numbers, phones and IDs into training examples and redact them in the same way.</p>")
+site = S["site_examples"]
+auto_right = sum(e["route"] == "auto" and e["verdict"] == "right" for e in site)
+flagged = sum(e["route"] == "human" for e in site)
+st.html(f'<p class="mz-p" style="max-width:46rem">On the {len(site)} examples in the live demo, {auto_right} got the '
+        f"expected intent with scores above 0.95, and {flagged} scored below the threshold and were flagged for review "
+        "(a wrong intent, a near miss and a greeting). The stolen-card message was the only confident mistake, and it "
+        "is labelled as a known failure in the demo. Right and wrong here are my reading, since these messages "
+        f"have no official label. Once loaded, each request took {S['warm_latency_ms']['min']}-"
+        f"{S['warm_latency_ms']['max']} ms on the MacBook CPU.</p>")
+
 # ---------------------------------------------------------------- 07 interpretation
 ui.section("07", "What the results show, and what they don't")
 s1, s2 = st.columns(2, gap="large")
@@ -159,7 +192,8 @@ s2.html('<div class="mz-h3 ">Not established</div><ul class="mz-ticks mz-amber">
         "<li>Performance on Gulf dialects (Emirati, Saudi) or real bank traffic. Neither was in the test data.</li>"
         "<li>Statistical certainty. Each model was trained once on a 370-query test set, with no confidence intervals or "
         "repeated seeds.</li>"
-        "<li>That model scores are calibrated probabilities. Calibration was not measured.</li></ul>")
+        "<li>That model scores are calibrated probabilities. Calibration was not measured, and live testing "
+        "found a wrong answer scored 0.98.</li></ul>")
 ui.callout("<b>Published context.</b> SinaLab report an F1 of about 92% (MSA) and 90% (Palestinian) for an AraBERT "
            f"model trained on the <i>full</i> ArBanking77 corpus (<a class='mz-a' href='{C.PAPER_URL}' target='_blank' "
            "rel='noopener'>paper</a>). Mizan used only the public sample, so the numbers are not directly comparable; "

@@ -1,0 +1,21 @@
+{
+  "model": "TF-IDF + logistic regression",
+  "accuracy": 0.6784,
+  "macro_f1": 0.6096,
+  "n": 370,
+  "by_variety": {
+    "MSA": {
+      "accuracy": 0.648,
+      "macro_f1": 0.5204,
+      "n": 179
+    },
+    "PAL": {
+      "accuracy": 0.7068,
+      "macro_f1": 0.6409,
+      "n": 191
+    }
+  },
+  "latency_ms": 0.38,
+  "size_mb": 10.4,
+  "notes": "char_wb 2-5 grams, C=100 (chosen on validation), CPU"
+}

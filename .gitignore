@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+.env
+.DS_Store
+.ipynb_checkpoints/
+# trained model weights are large; publish them to the Hugging Face Hub instead
+models/
+*.safetensors
+*.bin

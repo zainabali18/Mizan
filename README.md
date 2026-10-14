@@ -19,7 +19,8 @@ Everything runs on open-source models that can be hosted inside a bank's own inf
 | Stage | Status |
 |---|---|
 | 1. Data processing pipeline (normalisation, PII redaction, splits) | ✅ Done, with tests |
-| 2. Baselines: TF-IDF + logistic regression, zero-shot open-source LLM | 🔄 In progress |
+| 2a. Baseline: TF-IDF + logistic regression | ✅ Done |
+| 2b. Baseline: zero-shot open-source LLM (Qwen2.5-1.5B) | 🔄 In progress (Colab) |
 | 3. Fine-tuned Arabic model (Hugging Face) | ⏳ Planned |
 | 4. FastAPI service + Docker | ⏳ Planned |
 | 5. Live demo (Gradio on Hugging Face Spaces) | ⏳ Planned |
@@ -74,13 +75,21 @@ The normaliser removes diacritics and tatweel, unifies alef forms (أ إ آ → 
 
 ## Results
 
-*Coming next: accuracy, macro-F1 (overall, MSA and dialect), response time and model size for each approach.*
+All models are scored on the same 370 held-out test queries with the same code (`mizan/evaluate.py`). **Macro-F1** is the headline metric: it weights all 77 intents equally, so a model can't score well by only getting the common intents right. Latency is measured end to end on raw text: PII redaction, normalisation and prediction.
 
-| Model | Accuracy | Macro-F1 | MSA F1 | Dialect F1 | Response time | Size |
+<!-- results:start -->
+| Model | Accuracy | Macro-F1 | MSA F1 | Dialect (PAL) F1 | Latency / query | Size |
 |---|---|---|---|---|---|---|
-| TF-IDF + logistic regression | – | – | – | – | – | – |
-| Zero-shot open-source LLM | – | – | – | – | – | – |
-| Fine-tuned Arabic model | – | – | – | – | – | – |
+| TF-IDF + logistic regression | 67.8% | **61.0%** | 52.0% | 64.1% | 1.9 ms | 10.4 MB |
+<!-- results:end -->
+
+*More rows are coming: a zero-shot open-source LLM and a fine-tuned Arabic model. This table is generated automatically by `python -m mizan.report --write`.*
+
+### Experiments
+
+**1. TF-IDF + logistic regression** (`mizan/baseline_tfidf.py`). A classic CPU model using character n-grams (2 to 5 letters), which handle Arabic prefixes, suffixes and dialect spellings well. The regularisation strength was chosen on the validation split only; the test split was used once. It trains in seconds and answers in about 2 ms on a laptop CPU, a strong, cheap baseline to beat.
+
+**2. Zero-shot open-source LLM** (`notebooks/02_zero_shot_llm.ipynb`). Qwen2.5-1.5B-Instruct is given the 77 intent names and asked to pick one, with no training. Running locally keeps it sovereign. It tests whether a general model is enough on its own.
 
 ---
 
@@ -94,8 +103,12 @@ mizan/
 ├── mizan/
 │   ├── normalise.py      # Arabic normalisation
 │   ├── pii.py            # personal-data redaction
-│   └── data.py           # builds processed splits + labels.json
-├── notebooks/            # benchmarking and fine-tuning (Colab)
+│   ├── data.py           # builds processed splits + labels.json
+│   ├── evaluate.py       # shared scoring (overall + MSA vs dialect)
+│   ├── baseline_tfidf.py # baseline 1
+│   └── report.py         # builds the results table
+├── notebooks/            # Colab: zero-shot LLM, fine-tuning
+├── results/              # one JSON per experiment
 ├── tests/                # pytest suite (runs in GitHub Actions)
 ├── app.py                # demo (coming)
 └── Dockerfile            # API container (coming)
@@ -107,8 +120,10 @@ mizan/
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-python -m mizan.data      # builds data/processed/
-python -m pytest -q       # runs the test suite
+python -m mizan.data             # builds data/processed/
+python -m mizan.baseline_tfidf   # trains + scores baseline 1
+python -m mizan.report --write   # refreshes the results table
+python -m pytest -q              # runs the test suite
 ```
 
 ---

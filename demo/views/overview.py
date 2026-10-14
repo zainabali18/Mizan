@@ -11,7 +11,6 @@ hero_text, hero_preview = st.columns([1.15, 1], gap="large")
 
 with hero_text:
     st.html(
-        '<p class="mz-eyebrow">Arabic NLP · Banking support · Portfolio project</p>'
         '<h1 class="mz-h1">Understanding Arabic banking requests, and knowing when to ask a human.</h1>'
         '<p class="mz-lede">Mizan reads a customer message written in Modern Standard Arabic or dialect, '
         "removes personal details such as card and Emirates ID numbers, and predicts which of "
@@ -70,7 +69,7 @@ st.html(
     "<li><b>A fine-tuned Arabic model, published openly</b> on Hugging Face, trained in 23 minutes on a free GPU.</li>"
     "<li><b>A human-review threshold chosen on validation data,</b> then checked on the test set: answers that clear "
     f"it were {C.pct(H['auto_acc'])} accurate.</li>"
-    "<li><b>A tested service around the model:</b> a Python classifier and FastAPI endpoint, 65 automated tests in "
+    "<li><b>A tested service around the model:</b> a Python classifier and FastAPI endpoint, 66 automated tests in "
     "GitHub Actions, and this site.</li></ol>"
 )
 

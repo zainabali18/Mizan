@@ -183,7 +183,7 @@ mark.pii { background: var(--pii); color: #5C3B00; border-radius: 4px; padding: 
 .mz-ticks li::before { content: ""; position: absolute; left: .1rem; top: .78rem; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
 .mz-ticks.mz-amber li::before { background: var(--amber); }
 .mz-ticks.mz-grey li::before { background: #9AA3B1; }
-.mz-status { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1.6rem; }
+.mz-status { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem,1fr)); gap: 1.6rem; }
 @media (max-width: 860px) { .mz-status { grid-template-columns: 1fr; } }
 .mz-status h4 { font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 .3rem;
   padding-bottom: .5rem; border-bottom: 2px solid var(--teal); }

@@ -207,7 +207,7 @@ streamlit run demo/streamlit_app.py
 
 The site has five pages: Overview, Live demo, Results and evaluation, How it works, and Case study. Every figure it shows is read from `results/*.json`, `results/evidence/` and `mizan_config.json`, so it can't drift from the recorded experiments (`tests/test_site_content.py` checks this). Fonts (IBM Plex Sans Arabic, Plex Mono; SIL OFL) are self-hosted from `demo/static/` and the theme lives in `.streamlit/config.toml`.
 
-The per-intent error analysis on the Results page appears once `results/arabert_test_predictions.csv` exists. Generate it by running `notebooks/04_export_predictions.ipynb`, then commit the CSV.
+The per-intent error analysis on the Results page reads `results/arabert_test_predictions.csv`, the published model's prediction for every test query, exported by `notebooks/04_export_predictions.ipynb` (run on a Colab T4 GPU). It reproduces the recorded results exactly: 79.19% accuracy, 76.16% macro-F1, and 73.78% of queries above the threshold at 89.38% accuracy. A test checks this.
 
 A Gradio version is also included (`pip install gradio && python app.py`).
 
@@ -221,7 +221,7 @@ python -m mizan.data             # builds data/processed/
 python -m mizan.baseline_tfidf   # baseline 1 (CPU, seconds)
 # baselines 2-3: run notebooks/02_*.ipynb and 03_*.ipynb on Colab (T4 GPU)
 python -m mizan.report --write   # refreshes the results table
-python -m pytest -q              # 65 tests (runs in GitHub Actions)
+python -m pytest -q              # 66 tests (runs in GitHub Actions)
 ```
 
 ---
@@ -240,7 +240,7 @@ python -m pytest -q              # 65 tests (runs in GitHub Actions)
 │   └── api.py            # FastAPI app
 ├── notebooks/            # Colab: zero-shot LLM, AraBERT fine-tuning
 ├── results/              # one JSON per experiment
-├── tests/                # 65 tests; model mocked so CI needs no GPU
+├── tests/                # 66 tests; model mocked so CI needs no GPU
 ├── demo/                 # Streamlit site (live): streamlit_app.py, views/, webui/, static/
 ├── app.py                # Gradio demo (alternative)
 ├── mizan_config.json     # model id + human-review threshold

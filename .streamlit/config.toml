@@ -1,7 +1,6 @@
 # Mizan theme. Fonts are self-hosted from demo/static (SIL Open Font License).
 [server]
 enableStaticServing = true
-fileWatcherType = "none"
 
 [browser]
 gatherUsageStats = false

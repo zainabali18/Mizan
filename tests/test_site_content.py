@@ -114,3 +114,16 @@ def test_spot_checks_match_the_examples_and_labels():
 def test_preview_is_not_the_known_failure():
     assert not C.PREVIEW_EXAMPLE.get("note")
     assert sum(bool(e.get("note")) for e in C.EXAMPLES) == 1
+
+
+@pytest.mark.skipif(not C.PREDICTIONS.exists(), reason="per-example predictions not exported yet")
+def test_exported_predictions_reproduce_the_recorded_results():
+    from sklearn.metrics import f1_score
+    pred = pd.read_csv(C.PREDICTIONS)
+    test = pd.read_csv(ROOT / "data" / "processed" / "test.csv")
+    assert list(pred.text) == list(test.text) and list(pred.label) == list(test.label)
+    rec = C.results()["arabert"]
+    assert (pred.label == pred.pred).mean() == pytest.approx(rec["accuracy"], abs=1e-3)
+    assert f1_score(pred.label, pred.pred, average="macro", zero_division=0) == pytest.approx(rec["macro_f1"], abs=1e-3)
+    auto = pred[pred.score >= C.config()["confidence_threshold"]]
+    assert len(auto) / len(pred) == pytest.approx(C.config()["test_auto_handled_share"], abs=1e-3)

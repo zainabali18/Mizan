@@ -91,9 +91,8 @@ st.html(
     "<li>Three-way benchmark on the test set</li>"
     "<li>Fine-tuned AraBERT, published</li><li>Validation-chosen review threshold</li>"
     "<li>Classifier service and FastAPI (unit tests, and checked by hand with the real model)</li><li>Live demo (this site)</li>"
-    "<li>Docker image: built on Apple silicon, same results as the local API, non-root, health check passing, and working with networking switched off</li></ul></div>"
-    '<div class="mz-col-amber"><h4>Written, not yet verified</h4><ul class="mz-ticks mz-amber">'
-    "<li>Per-intent and per-example analysis (notebook 04 provided, not yet run)</li></ul></div>"
+    "<li>Docker image: built on Apple silicon, same results as the local API, non-root, health check passing, and working with networking switched off</li>"
+    "<li>Per-intent and per-example analysis of all 370 test predictions</li></ul></div>"
     '<div class="mz-col-grey"><h4>Proposed next steps</h4><ul class="mz-ticks mz-grey">'
     "<li>Evaluate on Gulf dialects (Emirati, Saudi) before any UAE use</li>"
     "<li>Train on the full ArBanking77 corpus</li>"

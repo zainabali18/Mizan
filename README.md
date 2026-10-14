@@ -2,7 +2,7 @@
 
 **A sovereign Arabic intent classifier for banking customer support.**
 
-**[Live demo](https://mizan-banking.streamlit.app/)** · **[Model on Hugging Face](https://huggingface.co/zainabali18/mizan-arabert-arbanking77)** · ![tests](https://github.com/zainabali18/Mizan/actions/workflows/tests.yml/badge.svg)
+**[Live demo](https://mizan-banking.streamlit.app)** · **[Model on Hugging Face](https://huggingface.co/zainabali18/mizan-arabert-arbanking77)** · ![tests](https://github.com/zainabali18/Mizan/actions/workflows/tests.yml/badge.svg)
 
 A customer writes to their bank in Arabic, in formal Modern Standard Arabic or in dialect, for example *"بطاقتي ما وصلت"* ("my card hasn't arrived"). Mizan:
 
@@ -178,6 +178,10 @@ pip install -r demo/requirements.txt
 streamlit run demo/streamlit_app.py
 ```
 
+The site has five pages: Overview, Live demo, Results and evaluation, How it works, and Case study. Every figure it shows is read from `results/*.json`, `results/evidence/` and `mizan_config.json`, so it can't drift from the recorded experiments (`tests/test_site_content.py` checks this). Fonts (IBM Plex Sans Arabic, Plex Mono; SIL OFL) are self-hosted from `demo/static/` and the theme lives in `.streamlit/config.toml`.
+
+The per-intent error analysis on the Results page appears once `results/arabert_test_predictions.csv` exists. Generate it by running `notebooks/04_export_predictions.ipynb`, then commit the CSV.
+
 A Gradio version is also included (`pip install gradio && python app.py`).
 
 ### Reproduce the experiments
@@ -190,7 +194,7 @@ python -m mizan.data             # builds data/processed/
 python -m mizan.baseline_tfidf   # baseline 1 (CPU, seconds)
 # baselines 2-3: run notebooks/02_*.ipynb and 03_*.ipynb on Colab (T4 GPU)
 python -m mizan.report --write   # refreshes the results table
-python -m pytest -q              # 41 tests (runs in GitHub Actions)
+python -m pytest -q              # 61 tests (runs in GitHub Actions)
 ```
 
 ---
@@ -209,8 +213,8 @@ python -m pytest -q              # 41 tests (runs in GitHub Actions)
 │   └── api.py            # FastAPI app
 ├── notebooks/            # Colab: zero-shot LLM, AraBERT fine-tuning
 ├── results/              # one JSON per experiment
-├── tests/                # 41 tests; model mocked so CI needs no GPU
-├── demo/                 # Streamlit demo (live) + its requirements
+├── tests/                # 61 tests; model mocked so CI needs no GPU
+├── demo/                 # Streamlit site (live): streamlit_app.py, views/, webui/, static/
 ├── app.py                # Gradio demo (alternative)
 ├── mizan_config.json     # model id + human-handoff threshold
 ├── Dockerfile
@@ -233,5 +237,3 @@ python -m pytest -q              # 41 tests (runs in GitHub Actions)
 Data: Jarrar et al. (2023). *ArBanking77: Intent Detection Neural Model and a New Dataset in Modern and Dialectical Arabic.* ArabicNLP 2023. [Paper](https://aclanthology.org/2023.arabicnlp-1.22) · [Dataset](https://huggingface.co/datasets/SinaLab/ArBanking77)
 
 Base model: [AraBERT v0.2](https://huggingface.co/aubmindlab/bert-base-arabertv02) by AUB MIND Lab.
-
-Built by **Zainab Ali**: [GitHub](https://github.com/zainabali18) · [LinkedIn](https://www.linkedin.com/in/zainab-ali-286058260)

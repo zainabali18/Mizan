@@ -1,5 +1,83 @@
-[theme]
-primaryColor = "#1F3864"
-
+# Mizan theme. Fonts are self-hosted from demo/static (SIL Open Font License).
 [server]
+enableStaticServing = true
 fileWatcherType = "none"
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "light"
+primaryColor = "#0B6E69"
+backgroundColor = "#F7F4EE"
+secondaryBackgroundColor = "#EFEAE0"
+textColor = "#14213A"
+linkColor = "#0B6E69"
+borderColor = "#DED7C9"
+showWidgetBorder = true
+baseRadius = "8px"
+font = "Plex Arabic, sans-serif"
+headingFont = "Plex Arabic, sans-serif"
+codeFont = "Plex Mono, monospace"
+baseFontSize = 16
+
+[[theme.fontFaces]]
+family = "Plex Arabic"
+url = "app/static/fonts/ibm-plex-sans-arabic-arabic-400-normal.woff2"
+weight = 400
+unicodeRange = "U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC"
+
+[[theme.fontFaces]]
+family = "Plex Arabic"
+url = "app/static/fonts/ibm-plex-sans-arabic-latin-400-normal.woff2"
+weight = 400
+unicodeRange = "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+
+[[theme.fontFaces]]
+family = "Plex Arabic"
+url = "app/static/fonts/ibm-plex-sans-arabic-arabic-500-normal.woff2"
+weight = 500
+unicodeRange = "U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC"
+
+[[theme.fontFaces]]
+family = "Plex Arabic"
+url = "app/static/fonts/ibm-plex-sans-arabic-latin-500-normal.woff2"
+weight = 500
+unicodeRange = "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+
+[[theme.fontFaces]]
+family = "Plex Arabic"
+url = "app/static/fonts/ibm-plex-sans-arabic-arabic-600-normal.woff2"
+weight = 600
+unicodeRange = "U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC"
+
+[[theme.fontFaces]]
+family = "Plex Arabic"
+url = "app/static/fonts/ibm-plex-sans-arabic-latin-600-normal.woff2"
+weight = 600
+unicodeRange = "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+
+[[theme.fontFaces]]
+family = "Plex Arabic"
+url = "app/static/fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2"
+weight = 700
+unicodeRange = "U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC"
+
+[[theme.fontFaces]]
+family = "Plex Arabic"
+url = "app/static/fonts/ibm-plex-sans-arabic-latin-700-normal.woff2"
+weight = 700
+unicodeRange = "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+
+[[theme.fontFaces]]
+family = "Plex Mono"
+url = "app/static/fonts/ibm-plex-mono-latin-400-normal.woff2"
+weight = 400
+
+[[theme.fontFaces]]
+family = "Plex Mono"
+url = "app/static/fonts/ibm-plex-mono-latin-500-normal.woff2"
+weight = 500
+
+[client]
+toolbarMode = "minimal"

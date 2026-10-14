@@ -4,4 +4,8 @@
 torch
 transformers>=4.44
 numpy>=1.26
-streamlit>=1.35
+pandas>=2.0
+scikit-learn>=1.4
+altair>=5
+# The site uses top navigation, st.pills and file-based st.html, tested on 1.65.
+streamlit>=1.65

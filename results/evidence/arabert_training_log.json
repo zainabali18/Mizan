@@ -1,0 +1,149 @@
+{
+  "source": "Transcribed from the Trainer output of notebooks/03_fine_tune_arabert.ipynb (Colab, T4 GPU, 14 Oct 2026).",
+  "model": "aubmindlab/bert-base-arabertv02",
+  "split_evaluated": "validation (124 queries)",
+  "best_epoch": 18,
+  "training_minutes": 22.9,
+  "epochs": [
+    {
+      "epoch": 1,
+      "train_loss": 4.378558,
+      "val_loss": 4.327401,
+      "val_accuracy": 0.032258,
+      "val_macro_f1": 0.003286
+    },
+    {
+      "epoch": 2,
+      "train_loss": 4.21521,
+      "val_loss": 4.09279,
+      "val_accuracy": 0.064516,
+      "val_macro_f1": 0.023111
+    },
+    {
+      "epoch": 3,
+      "train_loss": 3.371286,
+      "val_loss": 3.150209,
+      "val_accuracy": 0.258065,
+      "val_macro_f1": 0.16279
+    },
+    {
+      "epoch": 4,
+      "train_loss": 2.512498,
+      "val_loss": 2.349993,
+      "val_accuracy": 0.540323,
+      "val_macro_f1": 0.407496
+    },
+    {
+      "epoch": 5,
+      "train_loss": 1.768326,
+      "val_loss": 1.780584,
+      "val_accuracy": 0.620968,
+      "val_macro_f1": 0.522811
+    },
+    {
+      "epoch": 6,
+      "train_loss": 1.080597,
+      "val_loss": 1.474973,
+      "val_accuracy": 0.693548,
+      "val_macro_f1": 0.628547
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.726617,
+      "val_loss": 1.264283,
+      "val_accuracy": 0.741935,
+      "val_macro_f1": 0.655259
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.404642,
+      "val_loss": 1.194526,
+      "val_accuracy": 0.741935,
+      "val_macro_f1": 0.679902
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.292896,
+      "val_loss": 1.018962,
+      "val_accuracy": 0.741935,
+      "val_macro_f1": 0.67132
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.15872,
+      "val_loss": 1.053775,
+      "val_accuracy": 0.741935,
+      "val_macro_f1": 0.676082
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.092702,
+      "val_loss": 0.999403,
+      "val_accuracy": 0.782258,
+      "val_macro_f1": 0.706645
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.061558,
+      "val_loss": 1.021622,
+      "val_accuracy": 0.741935,
+      "val_macro_f1": 0.669545
+    },
+    {
+      "epoch": 13,
+      "train_loss": 0.036708,
+      "val_loss": 1.003065,
+      "val_accuracy": 0.758065,
+      "val_macro_f1": 0.692677
+    },
+    {
+      "epoch": 14,
+      "train_loss": 0.025025,
+      "val_loss": 1.029477,
+      "val_accuracy": 0.758065,
+      "val_macro_f1": 0.692244
+    },
+    {
+      "epoch": 15,
+      "train_loss": 0.019926,
+      "val_loss": 0.994807,
+      "val_accuracy": 0.758065,
+      "val_macro_f1": 0.688451
+    },
+    {
+      "epoch": 16,
+      "train_loss": 0.018757,
+      "val_loss": 0.999542,
+      "val_accuracy": 0.782258,
+      "val_macro_f1": 0.71823
+    },
+    {
+      "epoch": 17,
+      "train_loss": 0.016568,
+      "val_loss": 1.004343,
+      "val_accuracy": 0.766129,
+      "val_macro_f1": 0.699459
+    },
+    {
+      "epoch": 18,
+      "train_loss": 0.014677,
+      "val_loss": 1.003867,
+      "val_accuracy": 0.774194,
+      "val_macro_f1": 0.719661
+    },
+    {
+      "epoch": 19,
+      "train_loss": 0.024455,
+      "val_loss": 1.003603,
+      "val_accuracy": 0.774194,
+      "val_macro_f1": 0.704004
+    },
+    {
+      "epoch": 20,
+      "train_loss": 0.013836,
+      "val_loss": 1.007252,
+      "val_accuracy": 0.774194,
+      "val_macro_f1": 0.704004
+    }
+  ]
+}

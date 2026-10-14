@@ -13,6 +13,7 @@ Guarantees:
 from __future__ import annotations
 
 import json
+import os
 import time
 from pathlib import Path
 from typing import Callable, Protocol
@@ -22,7 +23,8 @@ import numpy as np
 from .pii import redact
 
 ROOT = Path(__file__).resolve().parent.parent
-CONFIG_PATH = ROOT / "mizan_config.json"
+# MIZAN_CONFIG lets tests/deployments point at another config without code changes.
+CONFIG_PATH = Path(os.environ.get("MIZAN_CONFIG", ROOT / "mizan_config.json"))
 
 
 class Backend(Protocol):

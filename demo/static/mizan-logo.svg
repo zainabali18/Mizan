@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 168 40" role="img" aria-label="Mizan">
+  <g fill="none" stroke="#14213A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 6v26"/>
+    <path d="M13 32h14"/>
+    <path d="M7 11h26"/>
+    <path d="M7 11l-4.5 10h9z"/>
+    <path d="M33 11l-4.5 10h9z"/>
+  </g>
+  <circle cx="20" cy="6" r="2.4" fill="#0B6E69"/>
+  <text x="46" y="27" font-family="IBM Plex Sans, Helvetica Neue, Arial, sans-serif" font-size="20" font-weight="600" fill="#14213A" letter-spacing="-0.3">Mizan</text>
+</svg>

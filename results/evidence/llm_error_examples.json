@@ -1,0 +1,50 @@
+{
+  "source": "Rows from the 'mistakes' table in notebooks/02_zero_shot_llm.ipynb (Colab, 14 Oct 2026); English glosses added for readers.",
+  "model": "Qwen2.5-1.5B-Instruct (zero-shot)",
+  "unparseable_outputs": 40,
+  "test_size": 370,
+  "examples": [
+    {
+      "text": "كم يجب أن يكون عمر أطفالي لفتح حساب؟",
+      "gloss": "How old do my children need to be to open an account?",
+      "true": "حد السن",
+      "pred": "دعم البلد",
+      "variety": "MSA"
+    },
+    {
+      "text": "هل تقبلون فيزا أو ماستركارد يا رفاق؟",
+      "gloss": "Do you accept Visa or Mastercard?",
+      "true": "فيزا أو ماستر كارد",
+      "pred": "آبل باي أو جوجل باي",
+      "variety": "MSA"
+    },
+    {
+      "text": "كيف يمكنني التعامل مع بطاقة مسروقة؟",
+      "gloss": "How do I deal with a stolen card?",
+      "true": "البطاقة المفقودة أو المسروقة",
+      "pred": "إعادة الشحن عن طريق رسوم التحويل المصرفي",
+      "variety": "MSA"
+    },
+    {
+      "text": "استلمت بطاقتي ولكن ليس رقم التعريف الشخصي الخاص بي.",
+      "gloss": "I received my card but not my PIN.",
+      "true": "الحصول على بطاقة فعلية",
+      "pred": "تعبئة الرصيد نقدًا أو بشيك",
+      "variety": "MSA"
+    },
+    {
+      "text": "لقد تم تحصيل رسوم مني مقابل شيء لم أتوقعه",
+      "gloss": "I was charged a fee I didn't expect.",
+      "true": "تحصيل رسوم التحويل",
+      "pred": "تم تحصيل رسوم الدفع بالبطاقة",
+      "variety": "MSA"
+    },
+    {
+      "text": "كيف أرسل أموال حسابي عبر التحويل؟",
+      "gloss": "How do I send money from my account by transfer?",
+      "true": "نقل إلى الحساب",
+      "pred": "UNPARSEABLE",
+      "variety": "MSA"
+    }
+  ]
+}

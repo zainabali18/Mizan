@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" role="img" aria-label="Mizan">
+  <rect width="40" height="40" rx="9" fill="#14213A"/>
+  <g fill="none" stroke="#F7F4EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 9v22"/><path d="M14 31h12"/><path d="M9 13h22"/>
+    <path d="M9 13l-4 8.5h8z"/><path d="M31 13l-4 8.5h8z"/>
+  </g>
+  <circle cx="20" cy="9" r="2.2" fill="#5FC2B9"/>
+</svg>

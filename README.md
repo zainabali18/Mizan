@@ -2,7 +2,7 @@
 
 **A sovereign Arabic intent classifier for banking customer support.**
 
-**[Live demo](https://huggingface.co/spaces/zainabali18/mizan)** · **[Model on Hugging Face](https://huggingface.co/zainabali18/mizan-arabert-arbanking77)** · ![tests](https://github.com/zainabali18/Mizan/actions/workflows/tests.yml/badge.svg)
+**[Live demo](https://mizan.streamlit.app)** · **[Model on Hugging Face](https://huggingface.co/zainabali18/mizan-arabert-arbanking77)** · ![tests](https://github.com/zainabali18/Mizan/actions/workflows/tests.yml/badge.svg)
 
 A customer writes to their bank in Arabic, in formal Modern Standard Arabic or in dialect, for example *"بطاقتي ما وصلت"* ("my card hasn't arrived"). Mizan:
 
@@ -169,12 +169,16 @@ docker run -p 8000:8000 mizan
 - **The model is downloaded during the build;** the container then runs with `HF_HUB_OFFLINE=1`, so it never contacts the internet.
 - It uses CPU-only PyTorch, runs as a non-root user, and includes a health check.
 
-### Demo (Gradio)
+### Demo
+
+Live on **Streamlit Community Cloud** (`demo/streamlit_app.py`, deployed straight from this repository). To run it locally:
 
 ```bash
-pip install gradio
-python app.py
+pip install -r demo/requirements.txt
+streamlit run demo/streamlit_app.py
 ```
+
+A Gradio version is also included (`pip install gradio && python app.py`).
 
 ### Reproduce the experiments
 
@@ -206,7 +210,8 @@ python -m pytest -q              # 41 tests (runs in GitHub Actions)
 ├── notebooks/            # Colab: zero-shot LLM, AraBERT fine-tuning
 ├── results/              # one JSON per experiment
 ├── tests/                # 41 tests; model mocked so CI needs no GPU
-├── app.py                # Gradio demo
+├── demo/                 # Streamlit demo (live) + its requirements
+├── app.py                # Gradio demo (alternative)
 ├── mizan_config.json     # model id + human-handoff threshold
 ├── Dockerfile
 └── data/                 # raw + processed ArBanking77 sample

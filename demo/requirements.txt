@@ -1,0 +1,7 @@
+# Streamlit Community Cloud reads this file (it sits next to the entrypoint).
+# CPU-only PyTorch keeps the install small and fits the free tier.
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+transformers>=4.44
+numpy>=1.26
+streamlit>=1.35

@@ -2,7 +2,7 @@
 
 **A sovereign Arabic intent classifier for banking customer support.**
 
-**[Live demo](https://mizan.streamlit.app)** · **[Model on Hugging Face](https://huggingface.co/zainabali18/mizan-arabert-arbanking77)** · ![tests](https://github.com/zainabali18/Mizan/actions/workflows/tests.yml/badge.svg)
+**[Live demo](https://mizan-banking.streamlit.app/)** · **[Model on Hugging Face](https://huggingface.co/zainabali18/mizan-arabert-arbanking77)** · ![tests](https://github.com/zainabali18/Mizan/actions/workflows/tests.yml/badge.svg)
 
 A customer writes to their bank in Arabic, in formal Modern Standard Arabic or in dialect, for example *"بطاقتي ما وصلت"* ("my card hasn't arrived"). Mizan:
 

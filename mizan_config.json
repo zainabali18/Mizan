@@ -1,0 +1,10 @@
+{
+  "model_id": "zainabali18/mizan-arabert-arbanking77",
+  "base_model": "aubmindlab/bert-base-arabertv02",
+  "max_length": 64,
+  "normalise": false,
+  "confidence_threshold": 0.85,
+  "test_auto_handled_share": 0.7378,
+  "test_auto_handled_accuracy": 0.8938,
+  "test_routed_to_human_share": 0.2622
+}

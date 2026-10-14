@@ -1,0 +1,6 @@
+# Runtime for the API / demo (torch is installed separately: CPU build)
+pandas>=2.0
+numpy>=1.26
+fastapi>=0.110
+uvicorn>=0.29
+transformers>=4.44

@@ -1,0 +1,5 @@
+# Hugging Face Space (Gradio SDK) dependencies
+torch
+transformers>=4.44
+pandas>=2.0
+numpy>=1.26

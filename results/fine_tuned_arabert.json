@@ -1,0 +1,21 @@
+{
+  "model": "Fine-tuned AraBERT",
+  "accuracy": 0.7919,
+  "macro_f1": 0.7616,
+  "n": 370,
+  "by_variety": {
+    "MSA": {
+      "accuracy": 0.7933,
+      "macro_f1": 0.7257,
+      "n": 179
+    },
+    "PAL": {
+      "accuracy": 0.7906,
+      "macro_f1": 0.7536,
+      "n": 191
+    }
+  },
+  "latency_ms": 104.15,
+  "size_mb": 542.8,
+  "notes": "aubmindlab/bert-base-arabertv02, 20 epochs on 1,078 examples (22.9 min on T4), best epoch by validation macro-F1; latency = single query on CPU (GPU: 13 ms)"
+}

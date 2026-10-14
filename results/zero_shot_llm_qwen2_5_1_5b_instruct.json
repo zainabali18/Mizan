@@ -1,0 +1,21 @@
+{
+  "model": "Zero-shot LLM (Qwen2.5-1.5B-Instruct)",
+  "accuracy": 0.1,
+  "macro_f1": 0.0742,
+  "n": 370,
+  "by_variety": {
+    "MSA": {
+      "accuracy": 0.1341,
+      "macro_f1": 0.086,
+      "n": 179
+    },
+    "PAL": {
+      "accuracy": 0.0681,
+      "macro_f1": 0.0636,
+      "n": 191
+    }
+  },
+  "latency_ms": 350.19,
+  "size_mb": 3087.4,
+  "notes": "no training; T4 GPU fp16; single-query latency 350 ms (batched 201 ms); unparseable outputs: 40"
+}

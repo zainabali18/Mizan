@@ -11,6 +11,10 @@ def test_clean_text_redacts_then_normalises():
     assert clean_text("أريد إلغاء التحويل") == "اريد الغاء التحويل"
 
 
+def test_clean_text_without_normalisation_keeps_letters_but_still_redacts():
+    assert clean_text("أريد  إلغاء 0501234567", normalise=False) == "أريد إلغاء [PHONE]"
+
+
 @pytest.mark.skipif(not (RAW / "arbanking77_train.csv").exists(), reason="raw data not present")
 def test_build_on_real_data(tmp_path):
     summary = build(out_dir=tmp_path)

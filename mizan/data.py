@@ -29,10 +29,15 @@ TEST_MSA_ROWS = 179
 TEST_TOTAL_ROWS = 370
 
 
-def clean_text(text: str) -> str:
-    """The exact preprocessing used for training AND at inference time."""
+def clean_text(text: str, normalise: bool = True) -> str:
+    """The exact preprocessing used for training AND at inference time.
+
+    PII redaction always runs. Letter normalisation (alef/yaa/taa forms) helps
+    character-n-gram models; pretrained transformers such as AraBERT were trained
+    on natural Arabic, so for them only whitespace is tidied (normalise=False).
+    """
     redacted, _ = redact(text)
-    return normalise_arabic(redacted)
+    return normalise_arabic(redacted) if normalise else " ".join(redacted.split())
 
 
 def load_raw(split: str, raw_dir: Path = RAW) -> pd.DataFrame:

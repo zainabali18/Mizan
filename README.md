@@ -20,8 +20,8 @@ Everything runs on open-source models that can be hosted inside a bank's own inf
 |---|---|
 | 1. Data processing pipeline (normalisation, PII redaction, splits) | ✅ Done, with tests |
 | 2a. Baseline: TF-IDF + logistic regression | ✅ Done |
-| 2b. Baseline: zero-shot open-source LLM (Qwen2.5-1.5B) | 🔄 In progress (Colab) |
-| 3. Fine-tuned Arabic model (Hugging Face) | ⏳ Planned |
+| 2b. Baseline: zero-shot open-source LLM (Qwen2.5-1.5B) | ✅ Done |
+| 3. Fine-tuned Arabic model (AraBERT) + human-handoff threshold | 🔄 In progress (Colab) |
 | 4. FastAPI service + Docker | ⏳ Planned |
 | 5. Live demo (Gradio on Hugging Face Spaces) | ⏳ Planned |
 
@@ -81,15 +81,28 @@ All models are scored on the same 370 held-out test queries with the same code (
 | Model | Accuracy | Macro-F1 | MSA F1 | Dialect (PAL) F1 | Latency / query | Size |
 |---|---|---|---|---|---|---|
 | TF-IDF + logistic regression | 67.8% | **61.0%** | 52.0% | 64.1% | 1.9 ms | 10.4 MB |
+| Zero-shot LLM (Qwen2.5-1.5B-Instruct) | 10.0% | **7.4%** | 8.6% | 6.4% | 350.2 ms | 3087.4 MB |
 <!-- results:end -->
 
-*More rows are coming: a zero-shot open-source LLM and a fine-tuned Arabic model. This table is generated automatically by `python -m mizan.report --write`.*
+*The fine-tuned model's row is coming next. This table is generated automatically by `python -m mizan.report --write`. LLM latency is single-query on a T4 GPU; the other rows are on CPU.*
 
 ### Experiments
 
 **1. TF-IDF + logistic regression** (`mizan/baseline_tfidf.py`). A classic CPU model using character n-grams (2 to 5 letters), which handle Arabic prefixes, suffixes and dialect spellings well. The regularisation strength was chosen on the validation split only; the test split was used once. It trains in seconds and answers in about 2 ms on a laptop CPU, a strong, cheap baseline to beat.
 
-**2. Zero-shot open-source LLM** (`notebooks/02_zero_shot_llm.ipynb`). Qwen2.5-1.5B-Instruct is given the 77 intent names and asked to pick one, with no training. Running locally keeps it sovereign. It tests whether a general model is enough on its own.
+**2. Zero-shot open-source LLM** (`notebooks/02_zero_shot_llm.ipynb`). Qwen2.5-1.5B-Instruct was given the 77 intent names (numbered) and asked to reply with one number, with no training. It ran locally on a GPU, so no data left the machine.
+
+> **Finding:** the general-purpose LLM reached only **10.0% accuracy (7.4% macro-F1)**, far below the 10 MB TF-IDF model, while being **about 300× larger** (3.1 GB) and **far slower** (350 ms per query even on a GPU, against well under 5 ms on CPU). It did worse on dialect (6.4% F1) than on MSA (8.6%). In 40 of 370 cases (11%) it didn't return a valid intent number at all.
+
+Looking at its mistakes, the LLM mostly chose a *plausible but wrong neighbour*. For example:
+- "how old must my children be to open an account?" was labelled *country support* instead of *age limit*;
+- "I received my card but not my PIN" was labelled *top-up by cash or cheque*.
+
+With 77 fine-grained, overlapping intents, a small general model can't tell close categories apart from their names alone. That is exactly the gap a specialist model trained on the bank's own examples should close.
+
+**3. Fine-tuned AraBERT** (`notebooks/03_fine_tune_arabert.ipynb`). This fine-tunes [`aubmindlab/bert-base-arabertv02`](https://huggingface.co/aubmindlab/bert-base-arabertv02), an open-source Arabic BERT, on the 1,078 training queries. It keeps the epoch with the best validation macro-F1 and scores the test set once. The notebook also:
+- measures single-query latency on **CPU**, the realistic on-premise case;
+- picks a **confidence threshold** on the validation set below which requests are routed to a human agent.
 
 ---
 

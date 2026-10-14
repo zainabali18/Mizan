@@ -1,0 +1,33 @@
+{
+  "num_labels": 77,
+  "splits": {
+    "train": {
+      "rows": 1078,
+      "labels_present": 77,
+      "duplicates": 0,
+      "overlap_with_train": 0,
+      "variety_counts": {
+        "mixed": 1078
+      }
+    },
+    "validation": {
+      "rows": 124,
+      "labels_present": 63,
+      "duplicates": 0,
+      "overlap_with_train": 0,
+      "variety_counts": {
+        "mixed": 124
+      }
+    },
+    "test": {
+      "rows": 370,
+      "labels_present": 75,
+      "duplicates": 0,
+      "overlap_with_train": 0,
+      "variety_counts": {
+        "PAL": 191,
+        "MSA": 179
+      }
+    }
+  }
+}
